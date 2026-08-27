@@ -1,6 +1,6 @@
 -- Meridian Customer 360 — Silver Layer
 -- Denormalized facts from raw parquet (no bronze pass-through).
--- Raw data lives in /Volumes/oh_phi_workspace/meridian_bank/raw_data/<dataset>
+-- Raw data lives in /Volumes/techsummit_27/meridian_bank/raw_data/<dataset>
 
 USE SCHEMA meridian_bank;
 
@@ -19,7 +19,7 @@ SELECT
   END AS churn_signal_score
 FROM (
   SELECT DISTINCT servicing_note_text
-  FROM read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/risk_snapshots')
+  FROM read_files('/Volumes/techsummit_27/meridian_bank/raw_data/risk_snapshots')
   WHERE servicing_note_text IS NOT NULL
 );
 
@@ -51,10 +51,10 @@ SELECT
     WHEN h.maturity_date IS NOT NULL THEN datediff(h.maturity_date, current_date() - 1)
     ELSE NULL
   END AS days_to_maturity
-FROM read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/holdings') h
-JOIN read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/customers') c
+FROM read_files('/Volumes/techsummit_27/meridian_bank/raw_data/holdings') h
+JOIN read_files('/Volumes/techsummit_27/meridian_bank/raw_data/customers') c
   ON h.customer_id = c.customer_id
-JOIN read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/products') p
+JOIN read_files('/Volumes/techsummit_27/meridian_bank/raw_data/products') p
   ON h.product_id = p.product_id;
 
 -- ─────────────────────────────────────────────────────────────────────────────
@@ -77,8 +77,8 @@ SELECT
   r.balance_outflow_30d_usd,
   r.servicing_note_text,
   COALESCE(n.churn_signal_score, 0.1) AS churn_signal_score
-FROM read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/risk_snapshots') r
-JOIN read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/customers') c
+FROM read_files('/Volumes/techsummit_27/meridian_bank/raw_data/risk_snapshots') r
+JOIN read_files('/Volumes/techsummit_27/meridian_bank/raw_data/customers') c
   ON r.customer_id = c.customer_id
 LEFT JOIN note_churn_flags n
   ON r.servicing_note_text = n.servicing_note_text;
@@ -106,8 +106,8 @@ SELECT
   rc.retained_revenue_usd,
   rc.margin_impact_usd,
   rc.cost_usd
-FROM read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/retention_campaigns') rc
-JOIN read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/customers') c
+FROM read_files('/Volumes/techsummit_27/meridian_bank/raw_data/retention_campaigns') rc
+JOIN read_files('/Volumes/techsummit_27/meridian_bank/raw_data/customers') c
   ON rc.customer_id = c.customer_id
-JOIN read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/products') p
+JOIN read_files('/Volumes/techsummit_27/meridian_bank/raw_data/products') p
   ON rc.product_id = p.product_id;

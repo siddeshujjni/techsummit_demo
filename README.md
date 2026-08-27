@@ -21,9 +21,9 @@ Raw Parquet (UC Volume)
 ```
 
 ## Catalog & Schema
-- **Catalog**: `oh_phi_workspace`
+- **Catalog**: `techsummit_27`
 - **Schema**: `meridian_bank`
-- **Volume**: `/Volumes/oh_phi_workspace/meridian_bank/raw_data/`
+- **Volume**: `/Volumes/techsummit_27/meridian_bank/raw_data/`
 
 ## Key Tables
 | Table | Description |

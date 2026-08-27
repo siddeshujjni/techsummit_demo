@@ -39,7 +39,7 @@ current_risk AS (
 ),
 profile AS (
   SELECT customer_id, profile_summary
-  FROM read_files('/Volumes/oh_phi_workspace/meridian_bank/raw_data/customers')
+  FROM read_files('/Volumes/techsummit_27/meridian_bank/raw_data/customers')
 )
 SELECT
   r.customer_id,

@@ -8,7 +8,7 @@ CREATE OR REPLACE VIEW mv_customer_risk WITH METRICS LANGUAGE YAML AS
 $$
 version: 1.1
 comment: "Customer risk metric view for Meridian Bank retention dashboard"
-source: oh_phi_workspace.meridian_bank.gold_customer_position
+source: techsummit_27.meridian_bank.gold_customer_position
 fields:
 - name: tier
   expr: tier

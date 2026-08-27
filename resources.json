@@ -5,8 +5,8 @@
   "dashboard_name": "Meridian Customer Retention",
   "genie_space_id": "01f1a228dd83154c9c7d24155991b693",
   "genie_space_name": "Meridian Customer Retention",
-  "metric_view_name": "oh_phi_workspace.meridian_bank.mv_customer_risk",
-  "catalog": "oh_phi_workspace",
+  "metric_view_name": "techsummit_27.meridian_bank.mv_customer_risk",
+  "catalog": "techsummit_27",
   "schema": "meridian_bank",
-  "volume_path": "/Volumes/oh_phi_workspace/meridian_bank/raw_data/"
+  "volume_path": "/Volumes/techsummit_27/meridian_bank/raw_data/"
 }

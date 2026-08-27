@@ -3,10 +3,10 @@
   "title": "Meridian Customer Retention",
   "description": "Meridian Bank customer-retention analytics for Marcus Bell (EVP Consumer & Small Business Banking). A competitor rate promotion ~3 weeks ago pushed ~220 high-value customers with maturing CDs into attrition risk (~$159M balance-at-risk, ~$4.1M revenue-at-risk).",
   "tables": [
-    "oh_phi_workspace.meridian_bank.mv_customer_risk",
-    "oh_phi_workspace.meridian_bank.gold_customer_position",
-    "oh_phi_workspace.meridian_bank.gold_open_atrisk",
-    "oh_phi_workspace.meridian_bank.gold_nba_recommendations"
+    "techsummit_27.meridian_bank.mv_customer_risk",
+    "techsummit_27.meridian_bank.gold_customer_position",
+    "techsummit_27.meridian_bank.gold_open_atrisk",
+    "techsummit_27.meridian_bank.gold_nba_recommendations"
   ],
   "sample_questions": [
     "How much balance is at risk right now, and what's the revenue at risk?",
@@ -20,23 +20,23 @@
   "example_sqls": [
     {
       "question": "How much balance is at risk?",
-      "sql": "SELECT MEASURE(`balance_at_risk`) AS balance_at_risk, MEASURE(`revenue_at_risk`) AS revenue_at_risk FROM oh_phi_workspace.meridian_bank.mv_customer_risk"
+      "sql": "SELECT MEASURE(`balance_at_risk`) AS balance_at_risk, MEASURE(`revenue_at_risk`) AS revenue_at_risk FROM techsummit_27.meridian_bank.mv_customer_risk"
     },
     {
       "question": "Which customer tiers is the risk concentrated in?",
-      "sql": "SELECT tier, MEASURE(`atrisk_count`) AS atrisk_count, MEASURE(`balance_at_risk`) AS balance_at_risk FROM oh_phi_workspace.meridian_bank.mv_customer_risk GROUP BY tier ORDER BY balance_at_risk DESC"
+      "sql": "SELECT tier, MEASURE(`atrisk_count`) AS atrisk_count, MEASURE(`balance_at_risk`) AS balance_at_risk FROM techsummit_27.meridian_bank.mv_customer_risk GROUP BY tier ORDER BY balance_at_risk DESC"
     },
     {
       "question": "CUST-0000214 is high-risk \u2014 how much is at stake?",
-      "sql": "SELECT customer_id, tier, tenure_years, attrition_risk_score, balance_at_risk_usd, revenue_at_risk_usd, atrisk_product_id, atrisk_balance_usd, days_to_maturity FROM oh_phi_workspace.meridian_bank.gold_open_atrisk WHERE customer_id = 'CUST-0000214'"
+      "sql": "SELECT customer_id, tier, tenure_years, attrition_risk_score, balance_at_risk_usd, revenue_at_risk_usd, atrisk_product_id, atrisk_balance_usd, days_to_maturity FROM techsummit_27.meridian_bank.gold_open_atrisk WHERE customer_id = 'CUST-0000214'"
     },
     {
       "question": "What's the next best action for CUST-0000214?",
-      "sql": "SELECT customer_id, recommended_action, predicted_retained_usd, predicted_net_value_usd, action_ranking FROM oh_phi_workspace.meridian_bank.gold_nba_recommendations WHERE customer_id = 'CUST-0000214'"
+      "sql": "SELECT customer_id, recommended_action, predicted_retained_usd, predicted_net_value_usd, action_ranking FROM techsummit_27.meridian_bank.gold_nba_recommendations WHERE customer_id = 'CUST-0000214'"
     },
     {
       "question": "Across all at-risk customers, how much could we retain?",
-      "sql": "SELECT recommended_action, COUNT(*) AS customer_count, SUM(predicted_retained_usd) AS total_retained FROM oh_phi_workspace.meridian_bank.gold_nba_recommendations GROUP BY recommended_action ORDER BY total_retained DESC"
+      "sql": "SELECT recommended_action, COUNT(*) AS customer_count, SUM(predicted_retained_usd) AS total_retained FROM techsummit_27.meridian_bank.gold_nba_recommendations GROUP BY recommended_action ORDER BY total_retained DESC"
     }
   ]
 }
