@@ -1,0 +1,41 @@
+{
+  "script": "07_agent_schema_migration.py",
+  "executed_at": "2025-08-27T10:40:11Z",
+  "results": {
+    "branch_created": "agent-migration-001",
+    "ttl_hours": 24,
+    "migration_applied": "migrations/001_add_retention_scoring.sql",
+    "columns_added": [
+      {
+        "name": "retention_probability",
+        "type": "double precision"
+      },
+      {
+        "name": "model_version",
+        "type": "text",
+        "default": "v1.0"
+      },
+      {
+        "name": "scored_at",
+        "type": "timestamptz",
+        "default": "now()"
+      }
+    ],
+    "index_created": "idx_rm_actions_retention_score",
+    "schema_after": [
+      "action_id text (PK)",
+      "customer_id text",
+      "recommended_action text",
+      "recommended_offer_product_id text",
+      "recommended_rate_apy numeric(5,4)",
+      "predicted_retained_usd double precision",
+      "approved_by text",
+      "approved_at timestamptz",
+      "status text",
+      "notes text",
+      "retention_probability double precision",
+      "model_version text",
+      "scored_at timestamptz"
+    ]
+  }
+}

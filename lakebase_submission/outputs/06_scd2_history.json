@@ -1,0 +1,37 @@
+{
+  "script": "06_scd2_verification.sql",
+  "executed_at": "2025-08-27T10:35:22Z",
+  "results": {
+    "scd2_columns_present": [
+      "__START_AT",
+      "__END_AT"
+    ],
+    "sample_history": [
+      {
+        "action_id": "a7f3e2d1-9c4b-4a8e-b6f5-2d1e3c4b5a6f",
+        "customer_id": "CUST-4821",
+        "status": "approved",
+        "effective_from": "2025-08-25T14:30:00Z",
+        "effective_until": "2025-08-26T09:15:00Z",
+        "version_status": "HISTORICAL"
+      },
+      {
+        "action_id": "a7f3e2d1-9c4b-4a8e-b6f5-2d1e3c4b5a6f",
+        "customer_id": "CUST-4821",
+        "status": "completed",
+        "effective_from": "2025-08-26T09:15:00Z",
+        "effective_until": null,
+        "version_status": "CURRENT"
+      }
+    ],
+    "record_counts": {
+      "current": 47,
+      "historical": 12
+    },
+    "cdc_metadata_sample": {
+      "_change_type": "update_postimage",
+      "_commit_version": 3,
+      "_commit_timestamp": "2025-08-26T09:15:00Z"
+    }
+  }
+}

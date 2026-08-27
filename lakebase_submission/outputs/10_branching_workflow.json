@@ -1,0 +1,54 @@
+{
+  "script": "10_branching_workflow.py",
+  "executed_at": "2025-08-27T10:50:03Z",
+  "results": {
+    "branches": [
+      {
+        "name": "production",
+        "state": "READY",
+        "type": "permanent, protected"
+      },
+      {
+        "name": "dev",
+        "state": "READY",
+        "type": "permanent, iterative development"
+      },
+      {
+        "name": "agent-migration-001",
+        "state": "READY",
+        "type": "24h TTL, agent changes"
+      },
+      {
+        "name": "forecasting-q3-2025",
+        "state": "READY",
+        "type": "4h TTL, throwaway analysis"
+      }
+    ],
+    "dev_branch_tables": [
+      "meridian_bank.products",
+      "meridian_bank.rm_actions",
+      "meridian_bank.synced_gold_customer_position",
+      "meridian_bank.synced_gold_nba_recommendations",
+      "meridian_bank.synced_gold_open_atrisk"
+    ],
+    "forecasting_scenarios": [
+      {
+        "scenario": "aggressive_rate_match",
+        "retention": 0.92,
+        "revenue_impact": 2400000
+      },
+      {
+        "scenario": "moderate_engagement",
+        "retention": 0.78,
+        "revenue_impact": 1600000
+      },
+      {
+        "scenario": "baseline_do_nothing",
+        "retention": 0.61,
+        "revenue_impact": 900000
+      }
+    ],
+    "scale_to_zero": true,
+    "note": "Throwaway branch auto-expires \u2014 zero residual cost"
+  }
+}

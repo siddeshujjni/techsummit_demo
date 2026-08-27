@@ -1,0 +1,62 @@
+# Declarative Automation Bundle — Reverse Lakehouse Sync Pipeline
+# Defines the Postgres → Delta sync as code (not UI-only)
+# Deploy with: databricks bundle deploy --target prod
+
+bundle:
+  name: meridian-bank-reverse-sync
+
+workspace:
+  host: https://oneenvazure.azuredatabricks.net
+
+variables:
+  catalog:
+    default: techsummit_27
+  schema:
+    default: meridian_bank
+  lakebase_project:
+    default: meridian-bank
+  lakebase_branch:
+    default: production
+
+resources:
+  pipelines:
+    reverse_sync_rm_actions:
+      name: "Meridian Bank — Reverse Sync rm_actions"
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      target: ${var.catalog}.${var.schema}
+      channel: CURRENT
+      continuous: true
+      configuration:
+        lakebase.project: ${var.lakebase_project}
+        lakebase.branch: ${var.lakebase_branch}
+        lakebase.database: databricks_postgres
+        lakebase.source_schema: meridian_bank
+        lakebase.source_table: rm_actions
+        scd_type: 2
+      libraries:
+        - notebook:
+            path: ./pipelines/reverse_sync_rm_actions.sql
+
+  jobs:
+    validate_reverse_sync:
+      name: "Meridian Bank — Validate Reverse Sync"
+      schedule:
+        quartz_cron_expression: "0 0 */6 * * ?"
+        timezone_id: America/Los_Angeles
+      tasks:
+        - task_key: check_scd2_history
+          notebook_task:
+            notebook_path: ./06_scd2_verification.sql
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://oneenvazure.azuredatabricks.net
+
+  prod:
+    mode: production
+    workspace:
+      host: https://oneenvazure.azuredatabricks.net

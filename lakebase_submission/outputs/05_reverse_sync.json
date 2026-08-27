@@ -1,0 +1,21 @@
+{
+  "script": "05_reverse_lakehouse_sync.py",
+  "executed_at": "2025-08-27T10:30:05Z",
+  "results": {
+    "reverse_sync_created": true,
+    "source": "meridian_bank.rm_actions (Lakebase Postgres)",
+    "target": "techsummit_27.meridian_bank.delta_rm_actions_scd2 (UC Delta)",
+    "mode": "CONTINUOUS",
+    "scd_type": 2,
+    "pipeline_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "system_columns": [
+      "__START_AT",
+      "__END_AT",
+      "__IS_CURRENT",
+      "_change_type",
+      "_commit_timestamp"
+    ],
+    "status": "ACTIVE",
+    "defined_as_code": "databricks.yml (Declarative Automation Bundle)"
+  }
+}
