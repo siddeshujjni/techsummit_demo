@@ -1,0 +1,1200 @@
+{
+  "datasets": [
+    {
+      "name": "ds_customers",
+      "displayName": "Customer Position",
+      "queryLines": [
+        "SELECT\n",
+        "  customer_id,\n",
+        "  tier,\n",
+        "  tenure_years,\n",
+        "  home_metro,\n",
+        "  customer_lat,\n",
+        "  customer_lng,\n",
+        "  risk_band,\n",
+        "  attrition_risk_score,\n",
+        "  total_balance_usd,\n",
+        "  affected_deposit_balance_usd,\n",
+        "  balance_at_risk_usd,\n",
+        "  revenue_at_risk_usd\n",
+        "FROM\n",
+        "  techsummit_27.meridian_bank.gold_customer_position"
+      ]
+    },
+    {
+      "name": "ds_exposure",
+      "displayName": "Exposure Metrics",
+      "queryLines": [
+        "SELECT\n",
+        "  tier,\n",
+        "  risk_band,\n",
+        "  home_metro,\n",
+        "  MEASURE(`balance_at_risk`) AS balance_at_risk_usd,\n",
+        "  MEASURE(`revenue_at_risk`) AS revenue_at_risk_usd,\n",
+        "  MEASURE(`critical_count`) AS critical_count,\n",
+        "  MEASURE(`atrisk_count`) AS atrisk_count,\n",
+        "  MEASURE(`customer_count`) AS customer_count\n",
+        "FROM\n",
+        "  techsummit_27.meridian_bank.mv_customer_risk\n",
+        "GROUP BY\n",
+        "  ALL"
+      ]
+    },
+    {
+      "name": "ds_nba",
+      "displayName": "NBA Recommendations",
+      "queryLines": [
+        "SELECT\n",
+        "  customer_id,\n",
+        "  recommended_action,\n",
+        "  recommended_offer_product_id,\n",
+        "  predicted_retained_usd,\n",
+        "  predicted_net_value_usd\n",
+        "FROM\n",
+        "  techsummit_27.meridian_bank.gold_nba_recommendations"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "ad60097c",
+      "displayName": "Retention",
+      "layout": [
+        {
+          "widget": {
+            "name": "header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## <span style=\"color: #F5A623;\">Meridian Customer Retention</span>\n",
+                "\n",
+                "**Marcus Bell**, EVP Consumer & Small Business Banking\n",
+                "<p>&nbsp;</p>\n",
+                "\n",
+                "A competitor rate promotion \\~3 weeks ago pushed our most valuable customers with maturing CDs into attrition risk (red — about to walk). This dashboard tracks the exposure and the recovery."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "sum(balance_at_risk_usd)",
+                      "expression": "SUM(`balance_at_risk_usd`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\"><span style=\"color:#00483A\">Balance at Risk</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#00483A"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(balance_at_risk_usd)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 0
+                    },
+                    "significantFigures": {
+                      "type": "all"
+                    }
+                  },
+                  "style": {
+                    "fontColor": "#E44D3D"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBorderColor": {
+                "light": "#00483A"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_rar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "sum(revenue_at_risk_usd)",
+                      "expression": "SUM(`revenue_at_risk_usd`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\"><span style=\"color:#00483A\">Revenue at Risk</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#00483A"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(revenue_at_risk_usd)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 1
+                    }
+                  },
+                  "style": {
+                    "fontColor": "#E44D3D"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_critical",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "sum(critical_count)",
+                      "expression": "SUM(`critical_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\"><span style=\"color:#00483A\">Critical Customers</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#00483A"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(critical_count)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "style": {
+                    "fontColor": {
+                      "themeColorType": "visualizationColors",
+                      "position": 3
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_atrisk",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "sum(atrisk_count)",
+                      "expression": "SUM(`atrisk_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\"><span style=\"color:#00483A\">At-Risk Customers</span></span>",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#00483A"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(atrisk_count)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact"
+                  },
+                  "style": {
+                    "fontColor": {
+                      "themeColorType": "visualizationColors",
+                      "position": 3
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "scatter_risk",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_customers",
+                  "fields": [
+                    {
+                      "name": "risk_band",
+                      "expression": "`risk_band`"
+                    },
+                    {
+                      "name": "total_balance_usd",
+                      "expression": "`total_balance_usd`"
+                    },
+                    {
+                      "name": "attrition_risk_score",
+                      "expression": "`attrition_risk_score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"color: #00483A;font-size: 14px;\">Customer balance (USD) vs attrition risk</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "opacity": 0.67
+              },
+              "widgetType": "scatter",
+              "encodings": {
+                "x": {
+                  "fieldName": "total_balance_usd",
+                  "axis": {
+                    "title": "Balance",
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "attrition_risk_score",
+                  "displayName": "Risk Score",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "risk_band",
+                  "displayName": "Risk Band",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "critical",
+                        "color": "#FF8C42"
+                      },
+                      {
+                        "value": "elevated",
+                        "color": "#F5A623"
+                      },
+                      {
+                        "value": "watch",
+                        "color": "#D4AF37"
+                      },
+                      {
+                        "value": "healthy",
+                        "color": "#C8E6C9"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 4,
+            "width": 12,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_tier_band",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "risk_band",
+                      "expression": "`risk_band`"
+                    },
+                    {
+                      "name": "tier",
+                      "expression": "`tier`"
+                    },
+                    {
+                      "name": "sum(atrisk_count)",
+                      "expression": "SUM(`atrisk_count`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"color: #00483A;font-size: 14px;\">At-risk customers by tier &amp; band</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "tier",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "tier",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(atrisk_count)",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "risk_band",
+                  "displayName": "Band",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "critical",
+                        "color": "#FF8C42"
+                      },
+                      {
+                        "value": "elevated",
+                        "color": "#F5A623"
+                      },
+                      {
+                        "value": "watch",
+                        "color": "#D4AF37"
+                      },
+                      {
+                        "value": "healthy",
+                        "color": "#C8E6C9"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_balance_tier",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "tier",
+                      "expression": "`tier`"
+                    },
+                    {
+                      "name": "sum(balance_at_risk_usd)",
+                      "expression": "SUM(`balance_at_risk_usd`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"color: #00483A;font-size: 14px;\">Balance at risk by tier</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(balance_at_risk_usd)",
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact"
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "tier",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "color": {
+                  "fieldName": "tier",
+                  "legend": {
+                    "title": "Tier"
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "private",
+                        "color": "#08519C"
+                      },
+                      {
+                        "value": "affluent",
+                        "color": "#3182BD"
+                      },
+                      {
+                        "value": "mass_affluent",
+                        "color": "#6BAED6"
+                      },
+                      {
+                        "value": "mass",
+                        "color": "#BDD7E7"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 10,
+            "width": 6,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "nba",
+      "displayName": "Next Best Action",
+      "layout": [
+        {
+          "widget": {
+            "name": "header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Next Best Action\n",
+                "**What do we do about it?** The most at-risk customers, what they hold, and the model’s recommended action with the revenue it retains."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "table_critical",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_customers",
+                  "fields": [
+                    {
+                      "name": "customer_id",
+                      "expression": "`customer_id`"
+                    },
+                    {
+                      "name": "tier",
+                      "expression": "`tier`"
+                    },
+                    {
+                      "name": "tenure_years",
+                      "expression": "`tenure_years`"
+                    },
+                    {
+                      "name": "total_balance_usd",
+                      "expression": "`total_balance_usd`"
+                    },
+                    {
+                      "name": "attrition_risk_score",
+                      "expression": "`attrition_risk_score`"
+                    },
+                    {
+                      "name": "revenue_at_risk_usd",
+                      "expression": "`revenue_at_risk_usd`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`risk_band` IN ('critical', 'elevated')"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Highest revenue at risk"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "customer_id"
+                  },
+                  {
+                    "fieldName": "tier"
+                  },
+                  {
+                    "fieldName": "tenure_years"
+                  },
+                  {
+                    "fieldName": "total_balance_usd"
+                  },
+                  {
+                    "fieldName": "attrition_risk_score"
+                  },
+                  {
+                    "fieldName": "revenue_at_risk_usd"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "table_watch",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_customers",
+                  "fields": [
+                    {
+                      "name": "customer_id",
+                      "expression": "`customer_id`"
+                    },
+                    {
+                      "name": "tier",
+                      "expression": "`tier`"
+                    },
+                    {
+                      "name": "total_balance_usd",
+                      "expression": "`total_balance_usd`"
+                    },
+                    {
+                      "name": "attrition_risk_score",
+                      "expression": "`attrition_risk_score`"
+                    },
+                    {
+                      "name": "balance_at_risk_usd",
+                      "expression": "`balance_at_risk_usd`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`risk_band` IN ('watch')"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Rising-risk watch list"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "customer_id"
+                  },
+                  {
+                    "fieldName": "tier"
+                  },
+                  {
+                    "fieldName": "total_balance_usd"
+                  },
+                  {
+                    "fieldName": "attrition_risk_score"
+                  },
+                  {
+                    "fieldName": "balance_at_risk_usd"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_nba_mix",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_nba",
+                  "fields": [
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    },
+                    {
+                      "name": "count(customer_id)",
+                      "expression": "COUNT(`customer_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Recommended next best action (mix)"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "recommended_action",
+                  "displayName": "recommended_action",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(customer_id)",
+                  "displayName": "customer_id",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "recommended_action",
+                  "displayName": "recommended_action",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_retained",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_nba",
+                  "fields": [
+                    {
+                      "name": "sum(predicted_retained_usd)",
+                      "expression": "SUM(`predicted_retained_usd`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total predicted retained revenue",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#094074"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(predicted_retained_usd)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "USD",
+                    "abbreviation": "compact"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "table_nba",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_nba",
+                  "fields": [
+                    {
+                      "name": "customer_id",
+                      "expression": "`customer_id`"
+                    },
+                    {
+                      "name": "recommended_action",
+                      "expression": "`recommended_action`"
+                    },
+                    {
+                      "name": "recommended_offer_product_id",
+                      "expression": "`recommended_offer_product_id`"
+                    },
+                    {
+                      "name": "predicted_retained_usd",
+                      "expression": "`predicted_retained_usd`"
+                    },
+                    {
+                      "name": "predicted_net_value_usd",
+                      "expression": "`predicted_net_value_usd`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Next-best-action recommendations"
+              },
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "customer_id"
+                  },
+                  {
+                    "fieldName": "recommended_action"
+                  },
+                  {
+                    "fieldName": "recommended_offer_product_id"
+                  },
+                  {
+                    "fieldName": "predicted_retained_usd"
+                  },
+                  {
+                    "fieldName": "predicted_net_value_usd"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "global_filters",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "filter_tier",
+            "queries": [
+              {
+                "name": "dashboards/01f1a238a10b17b9ab60da11ad1e67ac/datasets/01f1a238cfc4182b83437b9a3c223b56_tier",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "tier",
+                      "expression": "`tier`"
+                    },
+                    {
+                      "name": "tier_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Tier"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "tier",
+                    "queryName": "dashboards/01f1a238a10b17b9ab60da11ad1e67ac/datasets/01f1a238cfc4182b83437b9a3c223b56_tier"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_risk_band",
+            "queries": [
+              {
+                "name": "dashboards/01f1a238a10b17b9ab60da11ad1e67ac/datasets/01f1a238cfc4182b83437b9a3c223b56_risk_band",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "risk_band",
+                      "expression": "`risk_band`"
+                    },
+                    {
+                      "name": "risk_band_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Risk Band"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "risk_band",
+                    "queryName": "dashboards/01f1a238a10b17b9ab60da11ad1e67ac/datasets/01f1a238cfc4182b83437b9a3c223b56_risk_band"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "filter_metro",
+            "queries": [
+              {
+                "name": "dashboards/01f1a238a10b17b9ab60da11ad1e67ac/datasets/01f1a238cfc4182b83437b9a3c223b56_home_metro",
+                "query": {
+                  "datasetName": "ds_exposure",
+                  "fields": [
+                    {
+                      "name": "home_metro",
+                      "expression": "`home_metro`"
+                    },
+                    {
+                      "name": "home_metro_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true,
+                "title": "Home Metro"
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "home_metro",
+                    "queryName": "dashboards/01f1a238a10b17b9ab60da11ad1e67ac/datasets/01f1a238cfc4182b83437b9a3c223b56_home_metro"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#F5F5F0"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF"
+      },
+      "widgetBorderColor": {
+        "light": "#00483A"
+      },
+      "selectionColor": {
+        "light": "#00A650"
+      },
+      "visualizationColors": [
+        "#00483A",
+        "#00A650",
+        "#F5A623",
+        "#1A6B5B",
+        "#7BC67E",
+        "#D4AF37",
+        "#2D8C6F",
+        "#C8E6C9",
+        "#FF8C42",
+        "#004D40"
+      ],
+      "widgetHeaderAlignment": "LEFT",
+      "widgetPadding": 16,
+      "widgetCornerRadius": 8,
+      "widgetShadow": 10,
+      "fontSettings": {
+        "base": {
+          "fontFamily": "Open Sans",
+          "fontColor": {
+            "light": "#1A1A1A"
+          }
+        },
+        "fieldTitle": {
+          "fontColor": {
+            "light": "#555555"
+          }
+        }
+      }
+    },
+    "applyModeEnabled": false
+  }
+}

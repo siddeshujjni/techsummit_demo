@@ -1,9 +1,9 @@
 {
-  "pipeline_id": "92a033db-7bcf-4244-87f3-575ce28a22a0",
+  "pipeline_id": "7ef9f037-4f92-42f9-84cb-dbc59441de74",
   "pipeline_name": "meridian_customer_360",
-  "dashboard_id": "01f1a227f05f139999d6e8507c1cc9eb",
+  "dashboard_id": "01f1a238a10b17b9ab60da11ad1e67ac",
   "dashboard_name": "Meridian Customer Retention",
-  "genie_space_id": "01f1a228dd83154c9c7d24155991b693",
+  "genie_space_id": "01f1a23899dc1441a01de338fa0482c7",
   "genie_space_name": "Meridian Customer Retention",
   "metric_view_name": "techsummit_27.meridian_bank.mv_customer_risk",
   "catalog": "techsummit_27",
