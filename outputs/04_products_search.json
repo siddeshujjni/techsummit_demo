@@ -1,0 +1,46 @@
+{
+  "script": "04_products_and_search.sql",
+  "executed_at": "2025-08-27T10:25:18Z",
+  "results": {
+    "extensions_created": [
+      "vector",
+      "lakebase_vector",
+      "lakebase_text"
+    ],
+    "table_created": "meridian_bank.products",
+    "rows_inserted": 11,
+    "search_indexes": [
+      {
+        "name": "products_search_gin_idx",
+        "type": "GIN",
+        "column": "search_vector"
+      },
+      {
+        "name": "products_bm25_idx",
+        "type": "lakebase_bm25",
+        "columns": [
+          "product_name",
+          "description",
+          "product_type",
+          "segment"
+        ]
+      }
+    ],
+    "search_query_result": {
+      "query": "high yield savings",
+      "results": [
+        {
+          "product_id": "PROD-DEP-2002",
+          "product_name": "High-Yield Savings",
+          "rank": 0.0992
+        },
+        {
+          "product_id": "PROD-DEP-2011",
+          "product_name": "Money Market Account",
+          "rank": 0.0607
+        }
+      ],
+      "latency_ms": 3
+    }
+  }
+}
