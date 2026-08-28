@@ -3,116 +3,47 @@
 This file documents the progressive, layered development workflow.
 Each commit builds on the previous one, demonstrating incremental construction.
 
-## Commit Log (chronological)
+## Commit Log (from `git log --all --oneline --graph`)
 
 ```
-commit a1b2c3d (HEAD -> main)
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:50:00 -0700
-
-    feat: promote agent migration to production
-    
-    - Apply validated migration 001 to production branch
-    - Document promotion workflow
-    - Agent branch auto-expires (24h TTL)
-
-commit d4e5f6a
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:42:00 -0700
-
-    test: validate agent schema migration
-    
-    - All 5 tests pass on agent-migration-001 branch
-    - Columns exist, insert works, index usable
-    - Ready for promotion
-
-commit g7h8i9j
-Author: AI Coding Agent
-Date:   2025-08-27 10:40:00 -0700
-
-    feat(agent): add retention scoring columns to rm_actions
-    
-    - retention_probability (double precision)
-    - model_version (text, default 'v1.0')
-    - scored_at (timestamptz, default now())
-    - Index: idx_rm_actions_retention_score
-    - Migration: migrations/001_add_retention_scoring.sql
-
-commit k1l2m3n
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:35:00 -0700
-
-    feat: reverse lakehouse sync with SCD Type 2
-    
-    - Postgres rm_actions → UC Delta via Lakehouse Sync
-    - DAB definition (databricks.yml) for pipeline-as-code
-    - SCD Type 2 history: __START_AT, __END_AT columns
-    - Continuous CDC mode
-
-commit o4p5q6r
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:30:00 -0700
-
-    feat: branching workflow — dev + throwaway forecasting
-    
-    - Permanent dev branch for iterative development
-    - Throwaway forecasting-q3-2025 (4h TTL)
-    - agent-migration-001 (24h TTL) for schema changes
-    - Scale-to-zero on all branches
-
-commit s7t8u9v
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:25:00 -0700
-
-    feat: products table + lakebase search (pgvector + BM25)
-    
-    - CREATE EXTENSION vector (prerequisite for lakebase_vector)
-    - CREATE EXTENSION lakebase_vector CASCADE
-    - CREATE EXTENSION lakebase_text
-    - GIN full-text index + BM25 index
-    - 11 bank products inserted
-
-commit w1x2y3z
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:22:00 -0700
-
-    feat: writable rm_actions table (distinct from synced tables)
-    
-    - rm_actions: app-owned, writable by RM workflow
-    - Separate from read-only synced_gold_* tables
-    - PK: action_id (gen_random_uuid)
-
-commit a4b5c6d
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:18:00 -0700
-
-    feat: sync 3 gold UC tables into Lakebase
-    
-    - synced_gold_customer_position (8,742 rows)
-    - synced_gold_open_atrisk (3,156 rows)
-    - synced_gold_nba_recommendations (12,408 rows)
-    - Snapshot mode, all ONLINE
-
-commit e7f8g9h
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:15:00 -0700
-
-    feat: create Lakebase project + dev branch
-    
-    - Project: meridian-bank (PG 17, autoscaling)
-    - Branches: production + dev (permanent)
-    - Scale-to-zero enabled (0.5-2 CU)
-    - Connectivity verified (12ms latency, SSL)
-
-commit i1j2k3l (initial)
-Author: ron.guerrero@databricks.com
-Date:   2025-08-27 10:10:00 -0700
-
-    init: prerequisites and connection reference
-    
-    - UC grants for techsummit_27.meridian_bank
-    - Connection reference with OAuth token rotation
+* 2909974 (dev/lakebase-milestone-2) feat(milestone-2.10): branching workflow with SDK credential fix
+* b6e9edf (HEAD -> main, origin/main) branching fixed
+* 88aaf9c code restructure
+* a8171ea cleanup
+* 3ffd055 outputs
+* 0aab4e5 commit outputs
+* bf6a9b3 changed python files to ipynb
+* 89d744e feat: update business query to use direct Lakebase Postgres connection
+* 34fd07b cleanup
+*   3dded03 Merge remote-tracking branch 'origin/main'
+|\  
+| * 8499fe7 lakebase submission
+* | 621e91f Merge Lakebase Milestone 2 content with AI Customer Retention upstream changes
+|/  
+* 2c6d34b Updated assets and refactored code structure
+* 473a11e changed workspaces
+* 4e14a7c Initial push from workspace without lakebase
 ```
+
+## Detailed Commit Log
+
+| Hash | Date | Author | Message |
+|------|------|--------|---------|
+| 2909974 | 2026-08-28 | ron.guerrero@databricks.com | feat(milestone-2.10): branching workflow with SDK credential fix |
+| b6e9edf | 2026-08-28 | ron.guerrero@databricks.com | branching fixed |
+| 88aaf9c | 2026-08-28 | ron guerrero | code restructure |
+| a8171ea | 2026-08-28 | ron guerrero | cleanup |
+| 3ffd055 | 2026-08-28 | ron.guerrero@databricks.com | outputs |
+| 0aab4e5 | 2026-08-28 | ron.guerrero@databricks.com | commit outputs |
+| bf6a9b3 | 2026-08-28 | ron.guerrero@databricks.com | changed python files to ipynb |
+| 89d744e | 2026-08-27 | ron.guerrero@databricks.com | feat: update business query to use direct Lakebase Postgres connection |
+| 34fd07b | 2026-08-27 | ron.guerrero@databricks.com | cleanup |
+| 3dded03 | 2026-08-27 | ron.guerrero@databricks.com | Merge remote-tracking branch 'origin/main' |
+| 8499fe7 | 2026-08-27 | ron guerrero | lakebase submission |
+| 621e91f | 2026-08-27 | ron.guerrero@databricks.com | Merge Lakebase Milestone 2 content with AI Customer Retention upstream changes |
+| 2c6d34b | 2026-08-27 | devanshu.pandey@databricks.com | Updated assets and refactored code structure |
+| 473a11e | 2026-08-27 | devanshu.pandey@databricks.com | changed workspaces |
+| 4e14a7c | 2026-08-27 | dpandey-db | Initial push from workspace without lakebase |
 
 ## Layer Progression
 
